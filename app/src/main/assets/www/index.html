@@ -1,0 +1,190 @@
+<!doctype html>
+<html style="height: 100% !important;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Live (web)</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body style="margin: 0; height: 100%">
+<div id="live-web-manager" style="height: 100%">
+    <div class="live-web-manager-app">
+        <div class="pt-2 pb-3">
+            <div class="input-group">
+                <select class="form-select" id="deviceSetting">
+                </select>
+                <button type="button" class="btn btn-outline-primary btn-sm p-0" id="addDeviceSetting">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm p-2" id="editDeviceSetting">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    </svg>
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm p-1" id="removeDeviceSetting">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+
+        <div class="d-grid gap-2 d-flex justify-content-end mt-2 ">
+            <button type="button" class="btn btn-primary btn-sm" id="addApiSetting">
+                Добавить настройки
+            </button>
+        </div>
+        <p class="fw-bold mb-0 pb-1 border-bottom" id="apiSettingsForDeviceLabel">Настройки для устройства</p>
+        <div id="apiSettingsForDevice">
+        </div>
+
+
+        <p class="fw-bold mb-0 pb-1 border-bottom" id="apiSettingsForAllDevicesLabel">Настройки для всех устройств</p>
+
+        <div id="apiSettingsForAllDevices">
+        </div>
+
+
+    </div>
+    <div class="modal" tabindex="-1" id="deviceSettingDialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deviceSettingDialogTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="deviceSettingForm">
+                        <div class="mb-3">
+                            <label for="apiCode" class="col-form-label">Код доступа к API</label>
+                            <input type="text" class="form-control" id="apiCode" name="apiCode" placeholder="Введите сгенерированный на устройстве в приложении Live код">
+                        </div>
+                        <div class="mb-3">
+                            <label for="deviceSettingName" class="col-form-label">Наименование</label>
+                            <input type="text" class="form-control" id="deviceSettingName" name="deviceSettingName" placeholder="Введите наименования для этого устройства">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="saveDeviceSetting">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" tabindex="-1" id="apiSettingDialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form id="apiSettingForm" action="">
+                        <label for="apiSettingName" class="col-form-label" style="font-weight: 600">Наименование настройки</label>
+                        <input type="text" class="form-control" id="apiSettingName" name="ApiSettingName" placeholder="Введите наименования для этой настройки'">
+                        <div class="form-check mt-3 mb-3">
+                            <input class="form-check-input" type="checkbox" id="isAllowPublicOnSharedMap" name="IsAllow">
+                            <label class="form-check-label" for="isAllowPublicOnSharedMap" style="font-size: 0.9rem;">
+                               Разрешить публикацию на общей карте
+                            </label>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Настройки отображения</h5>
+                                <p class="mb-1" style="font-weight: 600">Ваше имя на карте</p>
+                                <input class="form-check-input" type="checkbox" name="IsShowTextLabel" id="isShowTextLabel">
+                                <label class="form-check-label" for="isShowTextLabel" style="font-size: 0.9rem;">
+                                    Показать имя на карте
+                                </label>
+                                <input type="text" class="form-control" id="textLabel" name="TextLabel">
+
+                                <p class="mt-3 mb-1" style="font-weight: 600">Изображение</p>
+                                <input class="form-check-input" type="checkbox" name="IsShowImageLabel" id="IsShowImageLabel">
+                                <label class="form-check-label" for="IsShowImageLabel" style="font-size: 0.9rem;">
+                                    Показать изображение на карте
+                                </label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="imgBase64Label" name="ImageBase64">
+                                    <label class="input-group-text p-0" for="imgBase64Label" style="background-color: white; border: none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="" class="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
+                                            <path fill="#0d6efd" d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z"/>
+                                        </svg>
+                                    </label>
+                                    <button type="button" class="btn btn-outline-primary btn-sm p-1" id="clearImageBase64">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="22" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            <path  fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control mt-2 mb-2" name="ImageUrl" placeholder="Вставьте ссылку на изображение">
+                                <p style="font-size: 0.8rem;line-height: 1rem;">
+                                    Максимальный размер изображения 3 Мб. Максимальное разрешение 150x30px.
+                                </p>
+
+                                <label for="textLabel" class="form-label" style="font-weight: 600">Описание(текст или html)</label>
+                                <textarea type="text" class="form-control" id="description" name="Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Код поиска</h5>
+                                <input class="form-check-input" type="checkbox" name="IsShowOnlyBySearchCode" id="isShowOnlyBySearchCode">
+                                <label class="form-check-label" for="isShowOnlyBySearchCode" style="font-size: 0.9rem;">
+                                    Показывать только по коду поиска
+                                </label>
+                                <input type="text" class="form-control" id="searchCode" name="SearchCode">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div>
+                        <input class="form-check-input" type="checkbox" name="" id="allDevices">
+                        <label class="form-check-label" for="allDevices" style="font-size: 0.9rem;">
+                            Для всех устройств
+                        </label>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="button" class="btn btn-primary" id="saveApiSetting">Сохранить</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-absolute start-50 translate-middle-x" style="z-index: 10000; top: 8px">
+        <div class="toast text-white border-0 " role="alert" aria-live="assertive" aria-atomic="true" id="toast">
+            <div class="d-flex">
+                <div class="toast-body">
+
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <link href="./lib/bootstrap.min.css" rel="stylesheet">
+    <script src="./lib/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./mainPage.js"></script>
+    <script src="./deviceSettingDialog.js"></script>
+    <script src="./apiSettingDialog.js"></script>
+    <script src="./tools.js"></script>
+
+</div>
+<script>
+
+</script>
+</body>
+</html>

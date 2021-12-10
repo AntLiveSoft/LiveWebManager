@@ -1,0 +1,6 @@
+.live-web-manager-app {
+    padding: 20px;
+}
+input::-webkit-file-upload-button{
+    display: none;
+}
