@@ -3,11 +3,13 @@ class ApiSettingDialog {
     apiSettingDialog;
     tools;
     showToast;
+    showDeleteConfirmToast;
     onRefreshApiSettings;
-    constructor(onRefreshApiSettings, showToast) {
+    constructor(onRefreshApiSettings, showToast, showDeleteConfirmToast) {
         this.tools = new Tools();
         this.onRefreshApiSettings = onRefreshApiSettings;
         this.showToast = showToast;
+        this.showDeleteConfirmToast = showDeleteConfirmToast;
     }
     init() {
         this.apiSettingDialog = new bootstrap.Modal(document.getElementById('apiSettingDialog'), {
@@ -24,7 +26,6 @@ class ApiSettingDialog {
             formElements['ImageBase64'].value = '';
         });
 
-        $('#deviceSetting').on('change', this.apiSettingsRefresh.bind(this));
     }
     getSelectedDeviceSettingId() {
         return document.getElementById('deviceSetting').value;
@@ -89,7 +90,7 @@ class ApiSettingDialog {
         $('.edit-api-setting').off('click');
         $('.remove-api-setting').off('click');
         $('.edit-api-setting').on('click', this.editApiSetting.bind(this));
-        $('.remove-api-setting').on('click', this.removeApiSetting.bind(this));
+        $('.remove-api-setting').on('click', this.beforeRemoveApiSetting.bind(this));
     }
     addNewApiSetting() {
         this.openApiSettingDialog();
@@ -99,17 +100,21 @@ class ApiSettingDialog {
         const apiSettingId = event.currentTarget.getAttribute('data-api-setting-id');
         this.openApiSettingDialog(apiSettingId);
     }
-    removeApiSetting() {
+    beforeRemoveApiSetting(event) {
         event.stopPropagation();
-        const apiSettingId = event.currentTarget.getAttribute('data-api-setting-id');
+        this.showDeleteConfirmToast('Удалить настройку?', ()=>{
+            const apiSettingId = event.currentTarget.getAttribute('data-api-setting-id')
+            this.removeApiSetting(apiSettingId);
+        })
+    }
+    removeApiSetting(apiSettingId) {
         let savedApiSettings = this.getApiSettingsFromLocalStorage();
-        let targetApiSettingIndex;
-        savedApiSettings.forEach((setting, index) => {
-            if(apiSettingId === setting.ApiSettingId)
-                targetApiSettingIndex = index;
+
+        const apiSettingWithoutCurrentSettings = savedApiSettings.filter((setting, index) => {
+            return apiSettingId !== setting.ApiSettingId
         });
-        savedApiSettings.splice(targetApiSettingIndex, 1);
-        this.saveApiSettingsInLocalStorage(savedApiSettings);
+
+        this.saveApiSettingsInLocalStorage(apiSettingWithoutCurrentSettings);
         this.apiSettingsRefresh();
     }
 

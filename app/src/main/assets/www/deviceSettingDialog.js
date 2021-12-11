@@ -7,11 +7,13 @@ class DeviceSettingDialog {
     onRemoveDeviceSetting;
     onSaveDeviceSetting;
     showToast;
-    constructor(onRemoveDeviceSetting, onSaveDeviceSetting, showToast) {
+    showDeleteConfirmToast;
+    constructor(onRemoveDeviceSetting, onSaveDeviceSetting, showToast, showDeleteConfirmToast) {
         this.tools = new Tools();
         this.onRemoveDeviceSetting = onRemoveDeviceSetting;
         this.onSaveDeviceSetting = onSaveDeviceSetting;
         this.showToast = showToast;
+        this.showDeleteConfirmToast = showDeleteConfirmToast;
     }
     init() {
         this.deviceSettingDialog = new bootstrap.Modal(document.getElementById('deviceSettingDialog'), {
@@ -22,7 +24,7 @@ class DeviceSettingDialog {
 
         $('#addDeviceSetting').on('click', this.addNewDeviceSetting.bind(this));
         $('#editDeviceSetting').on('click', this.editDeviceSetting.bind(this));
-        $('#removeDeviceSetting').on('click', this.removeDeviceSetting.bind(this));
+        $('#removeDeviceSetting').on('click', this.beforeRemoveDeviceSetting.bind(this));
         $('#saveDeviceSetting').on('click', this.saveDeviceSetting.bind(this));
     }
     getSelectedDeviceSettingId() {
@@ -94,13 +96,21 @@ class DeviceSettingDialog {
             deviceSettingName: formElements['deviceSettingName'].value,
         }
     }
-    removeDeviceSetting() {
+    beforeRemoveDeviceSetting(event) {
+        event.stopPropagation();
+
         const deviceSettingId = this.getSelectedDeviceSettingId();
 
         if(!deviceSettingId) {
             this.showToast('Выберите устройство', 'error');
             return;
         }
+
+        this.showDeleteConfirmToast('Удалить устройство?', ()=>{
+            this.removeDeviceSetting(deviceSettingId);
+        })
+    }
+    removeDeviceSetting(deviceSettingId) {
 
         let savedDeviceSettings = this.getDeviceSettingsFromLocalStorage();
 
@@ -133,8 +143,7 @@ class DeviceSettingDialog {
 
         this.saveDeviceSettingsInLocalStorage(newDeviceSettings);
         this.deviceSettingSelectRefresh();
-        $('#deviceSetting').val(formData.deviceSettingId);
         this.deviceSettingDialog.hide();
-        this.onSaveDeviceSetting();
+        this.onSaveDeviceSetting(formData.deviceSettingId);
     }
 }

@@ -1,20 +1,38 @@
 
 class MainPage {
+    LAST_SELECTED_DEVICE_SETTING_ID_NAME_FOR_LOCAL_STORAGE = 'lastSelectedDeviceSettingId'
     tools;
     deviceSettingDialog;
     apiSettingDialog;
     toast;
+    confirmToast;
     constructor() {
         this.tools = new Tools();
-        this.apiSettingDialog = new ApiSettingDialog(this.onRefreshApiSettings.bind(this), this.showToast.bind(this));
-        this.deviceSettingDialog = new DeviceSettingDialog(this.onRemoveDeviceSetting.bind(this), this.onSaveDeviceSetting.bind(this), this.showToast.bind(this));
+        this.apiSettingDialog = new ApiSettingDialog(this.onRefreshApiSettings.bind(this), this.showToast.bind(this), this.showDeleteConfirmToast.bind(this));
+        this.deviceSettingDialog = new DeviceSettingDialog(this.onRemoveDeviceSetting.bind(this), this.onSaveDeviceSetting.bind(this), this.showToast.bind(this), this.showDeleteConfirmToast.bind(this));
     }
     init() {
         this.deviceSettingDialog.init();
         this.apiSettingDialog.init();
 
         this.toast = new bootstrap.Toast(document.getElementById('toast'));
+        this.confirmToast = new bootstrap.Toast(document.getElementById('confirmToast'), {
+            autohide: false
+        });
 
+        $('#deviceSetting').val(this.getLastSelectedDeviceSettingIdFromLocalStorage());
+
+        $('#deviceSetting').on('change', ()=>{
+            this.apiSettingDialog.apiSettingsRefresh();
+            const deviceSettingId = document.getElementById('deviceSetting').value;
+           this.saveLastSelectedDeviceSettingIdInLocalStorage(deviceSettingId);
+        });
+    }
+    getLastSelectedDeviceSettingIdFromLocalStorage() {
+        return this.tools.loadFromLocalStorage(this.LAST_SELECTED_DEVICE_SETTING_ID_NAME_FOR_LOCAL_STORAGE, '');
+    }
+    saveLastSelectedDeviceSettingIdInLocalStorage(deviceSettingId) {
+        this.tools.saveInLocalStorage(this.LAST_SELECTED_DEVICE_SETTING_ID_NAME_FOR_LOCAL_STORAGE, deviceSettingId);
     }
     onRefreshApiSettings() {
         $('.api-setting-card').off('click');
@@ -25,16 +43,39 @@ class MainPage {
         $('#toast').find('.toast-body').html(message);
         this.toast.show();
     }
+    showDeleteConfirmToast(message, onConfirmDelete) {
+        $('#confirmToastOverlay').css('display', 'flex');
+        $('#confirmToast').find('.toast-body').find('h5').html(message);
+        this.confirmToast.show();
+        $('#confirmDeleteSetting').on('click', ()=>{
+            $('#confirmToastOverlay').css('display', 'none');
+            this.confirmToast.hide();
+            onConfirmDelete();
+        })
+        $('#closeConfirmDeleteSetting').on('click', ()=>{
+            $('#confirmToastOverlay').css('display', 'none');
+            this.confirmToast.hide();
+        })
+    }
     onRemoveDeviceSetting(deviceSettingId) {
         let savedApiSettings = this.apiSettingDialog.getApiSettingsFromLocalStorage();
         const filteredApiSettings = savedApiSettings.filter((setting)=>{
             return setting.DeviceSettingId !== deviceSettingId;
         })
         this.apiSettingDialog.saveApiSettingsInLocalStorage(filteredApiSettings);
+
+        const savedDeviceSettings = this.deviceSettingDialog.getDeviceSettingsFromLocalStorage();
+
+        const targetDeviceSettingId = savedDeviceSettings[0]?.deviceSettingId || '';
+        $('#deviceSetting').val(targetDeviceSettingId);
+        this.saveLastSelectedDeviceSettingIdInLocalStorage(targetDeviceSettingId);
+
         this.apiSettingDialog.apiSettingsRefresh();
 
     }
-    onSaveDeviceSetting() {
+    onSaveDeviceSetting(deviceSettingId) {
+        $('#deviceSetting').val(deviceSettingId);
+        this.saveLastSelectedDeviceSettingIdInLocalStorage(deviceSettingId);
         this.apiSettingDialog.apiSettingsRefresh();
     }
 
@@ -55,6 +96,8 @@ class MainPage {
 
             this.showRequestResult(result.IsSuccess, result.ErrorMessage);
         }
+        else
+            this.showToast('Добавьте устройство', 'error');
     }
     getDataForSave(targetDeviceSetting, targetApiSetting) {
         const data = {

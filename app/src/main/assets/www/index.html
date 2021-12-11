@@ -170,6 +170,21 @@
         </div>
     </div>
 
+    <div style="height: 100vh; width: 100vw; position: absolute; top: 0; z-index: 10; background-color: #2125299e; display: none" id="confirmToastOverlay">
+        <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="confirmToast">
+                <div class="toast-body">
+                    <h5>
+                    </h5>
+                    <div class="mt-2 pt-2 border-top d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary btn-sm m-1" id="closeConfirmDeleteSetting">Отмена</button>
+                        <button type="button" class="btn btn-primary btn-sm m-1" id="confirmDeleteSetting">Удалить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="./lib/jquery-3.6.0.min.js"></script>
 
 
