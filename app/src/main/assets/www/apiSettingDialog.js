@@ -16,7 +16,6 @@ class ApiSettingDialog {
             keyboard: false
         });
 
-        this.apiSettingsRefresh();
 
         $('#addApiSetting').on('click', this.addNewApiSetting.bind(this));
         $('#saveApiSetting').on('click', this.saveApiSetting.bind(this));

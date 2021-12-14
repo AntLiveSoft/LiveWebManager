@@ -27,6 +27,7 @@ class MainPage {
             const deviceSettingId = document.getElementById('deviceSetting').value;
            this.saveLastSelectedDeviceSettingIdInLocalStorage(deviceSettingId);
         });
+        this.apiSettingDialog.apiSettingsRefresh();
     }
     getLastSelectedDeviceSettingIdFromLocalStorage() {
         return this.tools.loadFromLocalStorage(this.LAST_SELECTED_DEVICE_SETTING_ID_NAME_FOR_LOCAL_STORAGE, '');
