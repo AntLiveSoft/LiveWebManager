@@ -26,6 +26,7 @@ class ApiSettingDialog {
             formElements['ImageBase64'].value = '';
         });
 
+        $('.is-change-settings').on('change', this.apiSettingsDisableControls.bind(this));
     }
     getSelectedDeviceSettingId() {
         return document.getElementById('deviceSetting').value;
@@ -35,6 +36,21 @@ class ApiSettingDialog {
     }
     saveApiSettingsInLocalStorage(apiSettings) {
         this.tools.saveInLocalStorage(this.API_SETTINGS_NAME_FOR_LOCAL_STORAGE, apiSettings);
+    }
+
+    async apiSettingsDisableControls() {
+        const formData = await this.getValueApiSettingForm();
+
+        $('#isAllowPublicOnSharedMap').prop('disabled', !formData.IsChangePublicOnSharedMapSettings);
+        $('#isShowTextLabel').prop('disabled', !formData.IsChangeShowTextLabelSettings);
+        $('#textLabel').prop('disabled', !formData.IsChangeTextLabelSettings);
+        $('#isShowImageLabel').prop('disabled', !formData.IsChangeShowImageLabelSettings);
+        $('#imgBase64Label').prop('disabled', !formData.IsChangeImageLabelSettings);
+        $('#clearImageBase64').prop('disabled', !formData.IsChangeImageLabelSettings);
+        $('#imageUrl').prop('disabled', !formData.IsChangeImageLabelSettings);
+        $('#description').prop('disabled', !formData.IsChangeDescriptionSettings);
+        $('#isShowOnlyBySearchCode').prop('disabled', !formData.IsChangeShowOnlyBySearchCodeSettings);
+        $('#searchCode').prop('disabled', !formData.IsChangeSearchCodeSettings);
     }
 
     apiSettingsRefresh() {
@@ -129,6 +145,15 @@ class ApiSettingDialog {
         formElements['ImageUrl'].value = formData.ImageUrl;
         formElements['TextLabel'].value = formData.TextLabel;
         formElements['Description'].value = formData.Description;
+        formElements['IsChangePublicOnSharedMapSettings'].checked = formData.IsChangePublicOnSharedMapSettings;
+        formElements['IsChangeTextLabelSettings'].checked = formData.IsChangeTextLabelSettings;
+        formElements['IsChangeShowTextLabelSettings'].checked = formData.IsChangeShowTextLabelSettings;
+        formElements['IsChangeImageLabelSettings'].checked = formData.IsChangeImageLabelSettings;
+        formElements['IsChangeShowImageLabelSettings'].checked = formData.IsChangeShowImageLabelSettings;
+        formElements['IsChangeDescriptionSettings'].checked = formData.IsChangeDescriptionSettings;
+        formElements['IsChangeSearchCodeSettings'].checked = formData.IsChangeSearchCodeSettings;
+        formElements['IsChangeShowOnlyBySearchCodeSettings'].checked = formData.IsChangeShowOnlyBySearchCodeSettings;
+
 
         if(!!formData.ImageBase64) {
             const file = new File([formData.ImageBase64], 'Загружено', {type: 'image/png'});
@@ -162,6 +187,14 @@ class ApiSettingDialog {
             const deviceSettingId = document.getElementById('deviceSetting').value;
             this.setValueApiSettingForm({
                 ApiSettingName: '',
+                IsChangePublicOnSharedMapSettings: false,
+                IsChangeTextLabelSettings: false,
+                IsChangeShowTextLabelSettings: false,
+                IsChangeImageLabelSettings: false,
+                IsChangeShowImageLabelSettings: false,
+                IsChangeDescriptionSettings: false,
+                IsChangeSearchCodeSettings: false,
+                IsChangeShowOnlyBySearchCodeSettings: false,
                 SearchCode: '',
                 ImageUrl: '',
                 TextLabel: '',
@@ -174,6 +207,7 @@ class ApiSettingDialog {
             });
         }
         this.apiSettingDialog.show();
+        this.apiSettingsDisableControls();
     }
     async getValueApiSettingForm() {
         const formElements = document.getElementById('apiSettingForm').elements;
@@ -185,6 +219,14 @@ class ApiSettingDialog {
             imageBase64 = await this.tools.getFileUrl(image);
         return  {
             ApiSettingName: formElements['ApiSettingName'].value,
+            IsChangePublicOnSharedMapSettings: formElements['IsChangePublicOnSharedMapSettings'].checked,
+            IsChangeTextLabelSettings: formElements['IsChangeTextLabelSettings'].checked,
+            IsChangeShowTextLabelSettings: formElements['IsChangeShowTextLabelSettings'].checked,
+            IsChangeImageLabelSettings: formElements['IsChangeImageLabelSettings'].checked,
+            IsChangeShowImageLabelSettings: formElements['IsChangeShowImageLabelSettings'].checked,
+            IsChangeDescriptionSettings: formElements['IsChangeDescriptionSettings'].checked,
+            IsChangeSearchCodeSettings: formElements['IsChangeSearchCodeSettings'].checked,
+            IsChangeShowOnlyBySearchCodeSettings: formElements['IsChangeShowOnlyBySearchCodeSettings'].checked,
             IsAllow: formElements['IsAllow'].checked,
             IsShowOnlyBySearchCode: formElements['IsShowOnlyBySearchCode'].checked,
             SearchCode: formElements['SearchCode'].value,
@@ -204,9 +246,6 @@ class ApiSettingDialog {
             return;
         }
         const formData = await this.getValueApiSettingForm();
-
-        if(!this.checkRequiredParameters(formData))
-            return;
 
         const dataForSave = {
             DeviceSettingId: isForAllDevices ? undefined : deviceSettingId,
@@ -229,22 +268,6 @@ class ApiSettingDialog {
         this.saveApiSettingsInLocalStorage(newApiSettings);
         this.apiSettingsRefresh();
         this.apiSettingDialog.hide();
-    }
-    checkRequiredParameters(formData) {
-        if(formData.IsShowTextLabel && !formData.TextLabel) {
-            this.showToast('Введите имя для отображения на карте', 'error');
-            return false;
-        }
-        if(formData.IsShowImageLabel && !(formData.ImageUrl || formData.ImageBase64)) {
-            this.showToast('Добавьте изображение для отображения на карте', 'error');
-            return false;
-        }
-        if(!formData.IsShowTextLabel && !formData.IsShowImageLabel) {
-            this.showToast('Необходимо показать на карте имя или изображение', 'error');
-            return false;
-        }
-
-        return true;
     }
 
 }

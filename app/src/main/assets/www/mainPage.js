@@ -103,15 +103,15 @@ class MainPage {
         const data = {
             ApiKey: targetDeviceSetting.apiCode,
             ChangeShareOnMapParams: {
-                IsAllow: targetApiSetting.IsAllow,
-                IsShowOnlyBySearchCode: targetApiSetting.IsShowOnlyBySearchCode,
-                SearchCode: targetApiSetting.SearchCode,
-                IsShowImageLabel: targetApiSetting.IsShowImageLabel,
-                ImageUrl: !!targetApiSetting.ImageUrl ? targetApiSetting.ImageUrl : undefined,
-                ImageBase64: !!targetApiSetting.ImageBase64 ? targetApiSetting.ImageBase64.split(',')[1] : undefined,
-                IsShowTextLabel: targetApiSetting.IsShowTextLabel,
-                TextLabel: targetApiSetting.TextLabel,
-                Description: targetApiSetting.Description,
+                ...(targetApiSetting.IsChangePublicOnSharedMapSettings && { IsAllow: targetApiSetting.IsAllow }),
+                ...(targetApiSetting.IsChangeShowOnlyBySearchCodeSettings && {  IsShowOnlyBySearchCode: targetApiSetting.IsShowOnlyBySearchCode, }),
+                ...(targetApiSetting.IsChangeSearchCodeSettings && {  SearchCode: targetApiSetting.SearchCode, }),
+                ...(targetApiSetting.IsChangeShowImageLabelSettings && {  IsShowImageLabel: targetApiSetting.IsShowImageLabel, }),
+                ...(targetApiSetting.IsChangeImageLabelSettings && {  ImageUrl: !!targetApiSetting.ImageUrl ? targetApiSetting.ImageUrl : undefined, }),
+                ...(targetApiSetting.IsChangeImageLabelSettings && {  ImageBase64: !!targetApiSetting.ImageBase64 ? targetApiSetting.ImageBase64.split(',')[1] : undefined, }),
+                ...(targetApiSetting.IsChangeShowTextLabelSettings && {   IsShowTextLabel: targetApiSetting.IsShowTextLabel, }),
+                ...(targetApiSetting.IsChangeTextLabelSettings && {   TextLabel: targetApiSetting.TextLabel, }),
+                ...(targetApiSetting.IsChangeDescriptionSettings && {    Description: targetApiSetting.Description, }),
             }
         }
         return data;
@@ -137,7 +137,7 @@ class MainPage {
     }
     showRequestResult(isSuccess, errorMessage) {
         if(isSuccess)
-            this.showToast('Запрос отправлен', 'success');
+            this.showToast('Изменения успешно применены', 'success');
         else
             this.showToast(errorMessage, 'error');
     }

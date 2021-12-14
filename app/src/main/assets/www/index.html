@@ -82,31 +82,71 @@
     <div class="modal" tabindex="-1" id="apiSettingDialog">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-body" style="background-color: #f5f5f5">
                     <form id="apiSettingForm" action="">
                         <label for="apiSettingName" class="col-form-label" style="font-weight: 600">Наименование настройки</label>
-                        <input type="text" class="form-control" id="apiSettingName" name="ApiSettingName" placeholder="Введите наименования для этой настройки'">
-                        <div class="form-check mt-3 mb-3">
-                            <input class="form-check-input" type="checkbox" id="isAllowPublicOnSharedMap" name="IsAllow">
-                            <label class="form-check-label" for="isAllowPublicOnSharedMap" style="font-size: 0.9rem;">
-                               Разрешить публикацию на общей карте
-                            </label>
+                        <input type="text" class="form-control" id="apiSettingName" name="ApiSettingName" placeholder="Введите наименования для этой настройки">
+
+                        <div style="height: 2px; border-bottom: solid 1px #c4c4c4; margin-top: 20px"></div>
+                        <div class="card mt-4 p-2">
+                            <div style="display: flex; justify-content: flex-end; position: relative; top: -22px">
+                                <input class="form-check-input is-change-settings" type="checkbox" name="IsChangePublicOnSharedMapSettings" id="isChangePublicOnSharedMapSettings">
+                                <label class="ms-2" for="isChangePublicOnSharedMapSettings" style="font-weight: 600">Установить</label>
+                            </div>
+                            <div style="position: relative; top: -14px; display: flex">
+                                <input class="form-check-input" type="checkbox" id="isAllowPublicOnSharedMap" name="IsAllow" style="min-width: 16px;">
+                                <label class="form-check-label ms-2" for="isAllowPublicOnSharedMap" style="font-size: 0.9rem">
+                                    Разрешить публикацию на общей карте
+                                </label>
+                            </div>
                         </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Настройки отображения</h5>
-                                <p class="mb-1" style="font-weight: 600">Ваше имя на карте</p>
-                                <input class="form-check-input" type="checkbox" name="IsShowTextLabel" id="isShowTextLabel">
-                                <label class="form-check-label" for="isShowTextLabel" style="font-size: 0.9rem;">
+
+
+                        <div class="card mt-3 p-2">
+                            <div style="display: flex; justify-content: flex-end; position: relative; top: -20px">
+                                <input class="form-check-input is-change-settings" type="checkbox" name="IsChangeShowTextLabelSettings" id="isChangeShowTextLabelSettings">
+                                <label class="ms-2" for="isChangeShowTextLabelSettings" style="font-weight: 600">Установить</label>
+                            </div>
+                            <div style="position: relative; top: -14px; display: flex">
+                                <input class="form-check-input" type="checkbox" name="IsShowTextLabel" id="isShowTextLabel" style="min-width: 16px;">
+                                <label class="form-check-label ms-2" for="isShowTextLabel" style="font-size: 0.9rem;">
                                     Показать имя на карте
                                 </label>
-                                <input type="text" class="form-control" id="textLabel" name="TextLabel">
+                            </div>
+                        </div>
 
-                                <p class="mt-3 mb-1" style="font-weight: 600">Изображение</p>
-                                <input class="form-check-input" type="checkbox" name="IsShowImageLabel" id="IsShowImageLabel">
-                                <label class="form-check-label" for="IsShowImageLabel" style="font-size: 0.9rem;">
+                        <div class="card mt-3 p-2">
+                            <div style="display: flex; justify-content: flex-end; position: relative; top: -20px">
+                                <input class="form-check-input is-change-settings" type="checkbox" name="IsChangeTextLabelSettings" id="isChangeTextLabelSettings">
+                                <label class="ms-2" for="isChangeTextLabelSettings" style="font-weight: 600">Установить</label>
+                            </div>
+                            <div style="position: relative; top: -19px">
+                                <label for="textLabel" class="form-label" style="font-weight: 600; opacity: 0.8">Имя</label>
+                                <input type="text" class="form-control" id="textLabel" name="TextLabel">
+                            </div>
+                        </div>
+
+
+
+                        <div class="card mt-3 p-2">
+                            <div style="display: flex; justify-content: flex-end; position: relative; top: -20px">
+                                <input class="form-check-input is-change-settings" type="checkbox" name="IsChangeShowImageLabelSettings" id="isChangeShowImageLabelSettings">
+                                <label class="ms-2" for="isChangeShowImageLabelSettings" style="font-weight: 600">Установить</label>
+                            </div>
+                            <div style="position: relative; top: -14px; display: flex">
+                                <input class="form-check-input" type="checkbox" name="IsShowImageLabel" id="isShowImageLabel" style="min-width: 16px;">
+                                <label class="form-check-label ms-2" for="isShowImageLabel" style="font-size: 0.9rem;">
                                     Показать изображение на карте
                                 </label>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3 p-2">
+                            <div style="display: flex; justify-content: flex-end; position: relative; top: -20px">
+                                <input class="form-check-input is-change-settings" type="checkbox" name="IsChangeImageLabelSettings" id="isChangeImageLabelSettings">
+                                <label class="ms-2" for="isChangeImageLabelSettings" style="font-weight: 600">Установить</label>
+                            </div>
+                            <div>
                                 <div class="input-group">
                                     <input type="file" class="form-control" id="imgBase64Label" name="ImageBase64">
                                     <label class="input-group-text p-0" for="imgBase64Label" style="background-color: white; border: none">
@@ -121,22 +161,47 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <input type="text" class="form-control mt-2 mb-2" name="ImageUrl" placeholder="Вставьте ссылку на изображение">
+                                <input type="text" class="form-control mt-2 mb-2" name="ImageUrl" id="imageUrl" placeholder="Вставьте ссылку на изображение">
                                 <p style="font-size: 0.8rem;line-height: 1rem;">
                                     Максимальный размер изображения 3 Мб. Максимальное разрешение 150x30px.
                                 </p>
-
-                                <label for="textLabel" class="form-label" style="font-weight: 600">Описание(текст или html)</label>
-                                <textarea type="text" class="form-control" id="description" name="Description"></textarea>
                             </div>
                         </div>
-                        <div class="card mt-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Код поиска</h5>
-                                <input class="form-check-input" type="checkbox" name="IsShowOnlyBySearchCode" id="isShowOnlyBySearchCode">
-                                <label class="form-check-label" for="isShowOnlyBySearchCode" style="font-size: 0.9rem;">
+
+
+                        <div class="card mt-3 p-2">
+                            <div style="display: flex; justify-content: flex-end; position: relative; top: -20px">
+                                <input class="form-check-input is-change-settings" type="checkbox" name="IsChangeDescriptionSettings" id="isChangeDescriptionSettings">
+                                <label class="ms-2" for="isChangeDescriptionSettings" style="font-weight: 600">Установить</label>
+                            </div>
+                            <div style="position: relative; top: -15px">
+                                <label for="description" class="form-label" style="font-weight: 600; opacity: 0.8">Описание(текст или html)</label>
+                                <textarea type="text" class="form-control" id="description" name="Description" style="resize: none; height: 110px"></textarea>
+                            </div>
+                        </div>
+
+
+
+                        <div class="card mt-3 p-2">
+                            <div style="display: flex; justify-content: flex-end; position: relative; top: -20px">
+                                <input class="form-check-input is-change-settings" type="checkbox" name="IsChangeShowOnlyBySearchCodeSettings" id="isChangeShowOnlyBySearchCodeSettings">
+                                <label class="ms-2" for="isChangeShowOnlyBySearchCodeSettings" style="font-weight: 600">Установить</label>
+                            </div>
+                            <div style="position: relative; top: -14px; display: flex">
+                                <input class="form-check-input" type="checkbox" name="IsShowOnlyBySearchCode" id="isShowOnlyBySearchCode" style="min-width: 16px;">
+                                <label class="form-check-label ms-2" for="isShowOnlyBySearchCode" style="font-size: 0.9rem;">
                                     Показывать только по коду поиска
                                 </label>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3 p-2">
+                            <div style="display: flex; justify-content: flex-end; position: relative; top: -20px">
+                                <input class="form-check-input is-change-settings" type="checkbox" name="IsChangeSearchCodeSettings" id="isChangeSearchCodeSettings">
+                                <label class="ms-2" for="isChangeSearchCodeSettings" style="font-weight: 600">Установить</label>
+                            </div>
+                            <div style="position: relative; top: -19px">
+                                <label for="searchCode" class="form-label" style="font-weight: 600; opacity: 0.8">Код поиска</label>
                                 <input type="text" class="form-control" id="searchCode" name="SearchCode">
                             </div>
                         </div>
